@@ -1,0 +1,42 @@
+class Solution {
+
+  public:
+  //subset sum - memoization
+  bool s(vector<int>&nums,int sum,int n,vector<vector<int>>&dp){
+        if(sum==0){
+            return true;
+        }
+        if(n==0){
+            return false;
+        }
+        if(dp[n][sum]!=-1){
+            return dp[n][sum];
+        }
+        if(nums[n-1]<=sum){
+            return dp[n][sum]=s(nums,sum,n-1,dp) || s(nums,sum-nums[n-1],n-1,dp);
+        }else{
+            return dp[n][sum]=s(nums,sum,n-1,dp);
+        }
+    }
+    int minDifference(vector<int>& arr) {
+        int range=0;
+        int n=arr.size();
+        for(int i=0;i<n;i++){
+            range+=arr[i];
+        }
+        vector<vector<int>> t(n+1,vector<int>(range+1,-1));
+        vector<int> v;
+        for(int i=0;i<=range/2;i++){
+            if(s(arr,i,n,t)){ 
+                v.push_back(i);
+            }
+        }
+        int mini=range;
+        for(int i=0;i<v.size();i++){
+            mini=min(mini,range-2*v[i]);
+        }
+        return mini;
+
+        
+    }
+};
